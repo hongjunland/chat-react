@@ -1,21 +1,14 @@
 import { useEffect, useState } from "react";
 import { Client, IMessage } from "@stomp/stompjs";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import "./ChatPage.css";
 
 interface ChatMessage {
-  // id: number;
-  // content: string;
-  // writer: number;
   from: string;
   text: string;
   roomId: number;
 }
-// interface ChatMessageForm {
-//     from: string;
-//     text: string;
-//     roomId: number;
-// }
 
 function ChatPage() {
   let { roomId } = useParams();
@@ -25,7 +18,6 @@ function ChatPage() {
   const [newMessage, setNewMessage] = useState<string>("");
 
   useEffect(() => {
-    
     const loadChatHistory = async () => {
       try {
         const response = await axios.get(
@@ -64,7 +56,7 @@ function ChatPage() {
       const chatMessage: ChatMessage = {
         from: writer,
         text: newMessage,
-        roomId: parseInt(roomId||''),
+        roomId: parseInt(roomId || ""),
       };
       stompClient.publish({
         destination: "/app/chat.send",
@@ -76,31 +68,36 @@ function ChatPage() {
   };
 
   return (
-    <div>
+    <div className="chat-container">
       <div>
+        <Link to={"/rooms"} className="back-link">
+          뒤로 가기
+        </Link>
+      </div>
+      <div className="chat-messages">
         {messages.map((msg, idx) => (
           <div key={idx}>
             {msg.from}: {msg.text}
           </div>
         ))}
       </div>
-      <div>
+      <div className="input-group">
         <label>작성자</label>
         <input
           type="text"
           value={writer}
           onChange={(e) => setWriter(e.target.value)}
-          width={"50px"}
         />
       </div>
-      <div>
+      <div className="input-group">
         <input
           type="text"
           value={newMessage}
-          width={"100px"}
           onChange={(e) => setNewMessage(e.target.value)}
         />
-        <button onClick={sendMessage}>Send</button>
+        <button className="send-button" onClick={sendMessage}>
+          Send
+        </button>
       </div>
     </div>
   );
