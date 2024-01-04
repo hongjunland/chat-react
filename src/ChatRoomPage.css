@@ -1,0 +1,46 @@
+/* ChatRoomPage.css */
+
+/* 전체 페이지 레이아웃 */
+.ChatRoomPage {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* 채팅방 목록 스타일 */
+.chatRoomList {
+    list-style: none;
+    padding: 0;
+}
+
+.chatRoomList li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+}
+
+.chatRoomList li:hover {
+    background-color: #f9f9f9;
+}
+
+.chatRoomList li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 600px) {
+    .ChatRoomPage {
+        padding: 10px;
+    }
+
+    .chatRoomList li {
+        padding: 8px 10px;
+    }
+}

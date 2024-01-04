@@ -4,16 +4,21 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import "./ChatPage.css";
 
-interface ChatMessage {
+interface ChatMessageReqeust {
   from: string;
   text: string;
   roomId: number;
 }
+interface ChatMessageResponse{
+  id: number;
+  content: string;
+  writer: string;
+}
 
 function ChatPage() {
-  let { roomId } = useParams();
+  const { roomId } = useParams();
   const [stompClient, setStompClient] = useState<Client | null>(null);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessageResponse[]>([]);
   const [writer, setWriter] = useState<string>("");
   const [newMessage, setNewMessage] = useState<string>("");
 
@@ -23,9 +28,7 @@ function ChatPage() {
         const response = await axios.get(
           `http://localhost:8788/api/v1/rooms/${roomId}`
         );
-        const messages = response.data.data.messageList.map((item: any) => {
-          return { from: item.writer, text: item.content, roomId: roomId };
-        });
+        const messages = response.data.data.messageList as ChatMessageResponse[];
         setMessages(messages);
       } catch (error) {
         console.error("채팅 내역 로드 실패", error);
@@ -37,15 +40,14 @@ function ChatPage() {
       brokerURL: "ws://localhost:8788/chat", // 서버 WebSocket URL
       reconnectDelay: 5000,
       onConnect: () => {
-        client.subscribe("/topic/public", (message: IMessage) => {
-          const msg: ChatMessage = JSON.parse(message.body);
+        client.subscribe(`/topic/public/rooms/${roomId}`, (message: IMessage) => {
+          const msg: ChatMessageResponse = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, msg]);
         });
       },
     });
     client.activate();
     setStompClient(client);
-    console.log(roomId);
     return () => {
       client.deactivate();
     };
@@ -53,13 +55,13 @@ function ChatPage() {
 
   const sendMessage = () => {
     if (stompClient && newMessage) {
-      const chatMessage: ChatMessage = {
+      const chatMessage: ChatMessageReqeust = {
         from: writer,
         text: newMessage,
         roomId: parseInt(roomId || ""),
       };
       stompClient.publish({
-        destination: "/app/chat.send",
+        destination: `/app/chat/rooms/${roomId}/send`,
         body: JSON.stringify(chatMessage),
       });
       console.log(messages);
@@ -77,7 +79,7 @@ function ChatPage() {
       <div className="chat-messages">
         {messages.map((msg, idx) => (
           <div key={idx}>
-            {msg.from}: {msg.text}
+            {msg.writer}: {msg.content}
           </div>
         ))}
       </div>
