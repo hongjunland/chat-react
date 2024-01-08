@@ -8,13 +8,15 @@
 }
 
 .chat-messages {
-    max-height: 300px;
+    /* max-height: 300px; */
     overflow-y: auto;
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ddd;
     background-color: #ffffff;
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse;
+    height: 300px;
 }
 
 .chat-messages div {

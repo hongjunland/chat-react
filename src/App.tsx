@@ -1,6 +1,6 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import ChatPage from "./ChatPage";
-import ChatRoomPage from "./ChatRoomPage";
+import ChatMessagePage from "./pages/ChatMessagePage";
+import ChatRoomPage from "./pages/ChatRoomPage";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
         <Link to={"/rooms"}>채팅방 보기</Link>
         <Routes>
           <Route path="/rooms" element={<ChatRoomPage/>}/>
-          <Route path="/rooms/:roomId" element={<ChatPage/>}/>
+          <Route path="/rooms/:roomId" element={<ChatMessagePage/>}/>
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "./ChatRoomPage.css";
-import InfiniteScroll from "react-infinite-scroll-component";
+import ChatRoomList from "../../components/ChatRoomList";
 
 interface ChatRoom {
   roomId: number;
@@ -34,29 +33,12 @@ function ChatRoomPage() {
       return { roomId: item.roomId } as ChatRoom;
     });
     setChatRoomList([...chatRoomList, ...nextChatRoomList]);
-    setCurrentPage(currentPage + 1);
+    setCurrentPage((prev)=> prev+1);
   };
   return (
     <>
       <div className="ChatRoomPage">
-        <InfiniteScroll
-          dataLength={chatRoomList.length}
-          next={fetchData}
-          hasMore={true} // 더 불러올 데이터가 있는지 여부
-          loader={<h4>Loading...</h4>}
-        >
-          <ul className="chatRoomList">
-            {chatRoomList.map((chatRoom, idx) => (
-              <div key={idx}>
-                <li>
-                  <Link to={`/rooms/${chatRoom.roomId}`}>
-                    {chatRoom.roomId} 번 채팅방
-                  </Link>
-                </li>
-              </div>
-            ))}
-          </ul>
-        </InfiniteScroll>
+        <ChatRoomList chatRoomList={chatRoomList} fetchData={fetchData}/>
       </div>
     </>
   );
