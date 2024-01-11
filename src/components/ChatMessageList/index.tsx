@@ -1,15 +1,6 @@
-import { ChangeEventHandler, Ref, useCallback, useEffect, useRef, useState } from "react";
-import { Client, IMessage } from "@stomp/stompjs";
-import axios from "axios";
-import { Link, useParams } from "react-router-dom";
-import "./ChatMessagePage.css";
+import { Ref } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-interface ChatMessageReqeust {
-  from: string;
-  text: string;
-  roomId: number;
-}
 interface ChatMessageResponse {
   id: number;
   content: string;
@@ -29,12 +20,7 @@ interface ChatMessageListProps{
 
 function ChatMessageList({messagesEndRef, messages, fetchMessages, hasMore, writer, newMessage, sendMessage, setWriter, setNewMessage}: ChatMessageListProps) {
   return (
-    <div className="chat-container">
-      <div>
-        <Link to={"/rooms"} className="back-link">
-          뒤로 가기
-        </Link>
-      </div>
+      <>
       <div id="scrollableDiv" className="chat-messages" ref={messagesEndRef}>
         <InfiniteScroll
           dataLength={messages.length}
@@ -70,7 +56,7 @@ function ChatMessageList({messagesEndRef, messages, fetchMessages, hasMore, writ
           Send
         </button>
       </div>
-    </div>
+      </>
   );
 }
 
