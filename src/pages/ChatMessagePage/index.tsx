@@ -23,30 +23,25 @@ function ChatMessagePage() {
   const [messages, setMessages] = useState<ChatMessageResponse[]>([]);
   const [writer, setWriter] = useState<string>("");
   const [newMessage, setNewMessage] = useState<string>("");
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState(true);
-  const messagesEndRef = useRef<any>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollToBottom = ()=>{
+    messagesEndRef.current?.scrollTo(0, messagesEndRef.current.scrollHeight);
+  }
   const loadInitChatMessages = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8788/api/v1/rooms/${roomId}/messages?page=${currentPage}&size=10`
+        `http://localhost:8788/api/v1/rooms/${roomId}/messages?size=10`
       );
       const responseMessages = response.data.data as ChatMessageResponse[];
       setMessages(responseMessages);
-      setCurrentPage((prev)=> prev + 1);
       setHasMore(responseMessages.length > 0);
-      if (currentPage === 0) {
-        scrollToBottom();
-      }
       setLoading(false)
     } catch (error) {
       console.error("채팅 내역 로드 실패", error);
     }
-  }, [currentPage, roomId]);
+  }, [roomId]);
   const client = new Client({
     brokerURL: "ws://localhost:8788/chat", // 서버 WebSocket URL
     reconnectDelay: 5000,
@@ -91,12 +86,9 @@ function ChatMessagePage() {
       );
       const responseMessages = response.data.data as ChatMessageResponse[];
       setMessages([...messages, ...responseMessages]);
-      setCurrentPage(currentPage + 1);
-      messagesEndRef.current.scrollTo(0, messagesEndRef.current.scrollHeight);
+      setCurrentPage((prev) => prev+1);
       setHasMore(responseMessages.length > 0);
-      if (currentPage === 0) {
-        scrollToBottom();
-      }
+      scrollToBottom();
     } catch (error) {
       console.error("채팅 내역 로드 실패", error);
     }

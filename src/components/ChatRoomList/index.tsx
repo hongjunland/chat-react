@@ -8,14 +8,15 @@ interface ChatRoomItem {
 interface ChatRoomProps {
   chatRoomList: ChatRoomItem[];
   fetchData: () => Promise<void>;
+  hasMore: boolean;
 }
-function ChatRoom({ chatRoomList, fetchData }: ChatRoomProps) {
+function ChatRoom({ chatRoomList, fetchData, hasMore }: ChatRoomProps) {
   return (
     <>
       <InfiniteScroll
         dataLength={chatRoomList.length}
         next={fetchData}
-        hasMore={true} // 더 불러올 데이터가 있는지 여부
+        hasMore={hasMore} // 더 불러올 데이터가 있는지 여부
         loader={<h4>Loading...</h4>}
       >
         <ChatRoomList>

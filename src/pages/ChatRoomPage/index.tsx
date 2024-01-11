@@ -9,6 +9,7 @@ interface ChatRoom {
 function ChatRoomPage() {
   const [chatRoomList, setChatRoomList] = useState<ChatRoom[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState(true);
   useEffect(() => {
     const loadChatRoomHistory = async () => {
       try {
@@ -17,6 +18,7 @@ function ChatRoomPage() {
           return { roomId: item.roomId } as ChatRoom;
         });
         setChatRoomList(chatRoomList);
+        setHasMore(chatRoomList.length > 0);
       } catch (error) {
         console.error("채팅 내역 로드 실패", error);
       }
@@ -34,13 +36,12 @@ function ChatRoomPage() {
     });
     setChatRoomList([...chatRoomList, ...nextChatRoomList]);
     setCurrentPage((prev)=> prev+1);
+    setHasMore(nextChatRoomList.length > 0);
   };
   return (
-    <>
-      <div className="ChatRoomPage">
-        <ChatRoomList chatRoomList={chatRoomList} fetchData={fetchData}/>
-      </div>
-    </>
+    <div className="ChatRoomPage">
+      <ChatRoomList chatRoomList={chatRoomList} fetchData={fetchData} hasMore={hasMore}/>
+    </div>
   );
 }
 
