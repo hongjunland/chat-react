@@ -13,4 +13,4 @@
 ### 채팅방목록 화면
 ![](https://velog.velcdn.com/images/hongjunland/post/b9330d09-3af7-4759-969f-c0334209f420/image.png)
 
-## server: [https://github.com/hongjunland/jpasample](https://github.com/hongjunland/vandemarket-chat-service)https://github.com/hongjunland/vandemarket-chat-service
+## server: [링크](https://github.com/hongjunland/vandemarket-chat-service)
