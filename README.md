@@ -1,7 +1,7 @@
 # 채팅 클라이언트
 
 * Language: TypeScript
-* Library & Framework: React 18, Emotion
+* Library & Framework: React 18, Emotion, Recoil, Stompjs, Websocket
 
 ## 적용 화면
 
